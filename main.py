@@ -1,3 +1,4 @@
+#字典{key,value}
 users={}#會員(帳號:密碼)
 products={}#商品(商品名:售價)
 cart={}#購物車
@@ -24,7 +25,6 @@ def login():#登入
 #registr()
 #login()
 
-#pos系統
 def addProduct():#新增商品
     productName=input("請輸入商品名稱:")
     if productName in products:
@@ -34,5 +34,32 @@ def addProduct():#新增商品
     products[productName]=price
     print(f"已新增商品{productName},{price}元")
     
-        
-    
+#測試用    
+#addProduct()
+#print(products)
+
+def showProduct():#顯示商品列表
+    if not products:
+        print("目前沒有商品")
+        return
+    print("\n商品列表")
+    for productName,price in products.items():
+        print(f"商品{productName}:{price}元")
+#showProduct()
+
+def addToCart():#加入購物車
+    wantBuy=input("請輸入欲購買的物品:")
+    if wantBuy not in products:
+        print(f"找不到此{wantBuy}商品")
+        return
+    howMuchWantBuy=int(input("請輸入欲購買的數量:"))
+    if wantBuy in cart:
+        cart[wantBuy]=cart[wantBuy]+howMuchWantBuy
+    else:
+        cart[wantBuy]=howMuchWantBuy
+    print(f"{wantBuy}已加入購物車,數量為{cart[wantBuy]}個")
+
+#測試  
+#addProduct()
+#showProduct()
+#addToCart()
