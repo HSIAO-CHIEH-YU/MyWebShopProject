@@ -63,3 +63,14 @@ def addToCart():#加入購物車
 #addProduct()
 #showProduct()
 #addToCart()
+
+def shopping():#結帳
+    if not cart:
+        print("您的購物車是空的!")
+        return
+    totalMoney=0
+    for wantBuy,howMuchWantBuy in cart.items():
+        x=products[wantBuy]*howMuchWantBuy
+        #products字典裡的[wantBuy](想買的東西)=那個商品的售價
+        #howMuchWantBuy=上面cart.items()裡面的value 幾個
+        totalMoney=totalMoney+x
