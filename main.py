@@ -74,3 +74,34 @@ def shopping():#結帳
         #products字典裡的[wantBuy](想買的東西)=那個商品的售價
         #howMuchWantBuy=上面cart.items()裡面的value 幾個
         totalMoney=totalMoney+x
+    print(f"總金額為:{totalMoney}元")
+    
+#主程式
+while True:
+    print("===POS系統===")
+    print("1.註冊帳號")
+    print("2.登入帳號")
+    print("3.新稱商品")
+    print("4.顯示商品")
+    print("5.加入購物車")
+    print("6.結帳")
+    print("7.離開系統")
+    choice=int(input("請選擇功能:"))
+    
+    if choice==1:
+        registr()
+    elif choice==2:
+        login()
+    elif choice==3:
+        addProduct()
+    elif choice==4:
+        showProduct()
+    elif choice==5:
+        addToCart()
+    elif choice==6:
+        shopping()
+    elif choice==7:
+        print("感謝使用pos系統")
+        break
+    else:
+        print("請輸入有效選項!")
