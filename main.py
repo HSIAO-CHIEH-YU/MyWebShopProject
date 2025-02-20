@@ -77,6 +77,7 @@ def shopping():#結帳
     print(f"總金額為:{totalMoney}元")
     
 #主程式
+login_in=False
 while True:
     print("===POS系統===")
     print("1.註冊帳號")
@@ -86,22 +87,39 @@ while True:
     print("5.加入購物車")
     print("6.結帳")
     print("7.離開系統")
-    choice=int(input("請選擇功能:"))
     
+    if not login_in:
+        print("請先登入或註冊!")
+        choice=int(input("請選擇功能:"))
+    else:
+        choice=int(input("請選擇功能:"))
+        
     if choice==1:
         registr()
     elif choice==2:
-        login()
-    elif choice==3:
-        addProduct()
-    elif choice==4:
-        showProduct()
-    elif choice==5:
-        addToCart()
-    elif choice==6:
-        shopping()
-    elif choice==7:
-        print("感謝使用pos系統")
+        login_in=login()
+    elif choice == 3:
+        if login_in:
+            addProduct()
+        else:
+            print("請先登入!")
+    elif choice == 4:
+        if login_in:  
+            showProduct()
+        else:
+            print("請先登入!")
+    elif choice == 5:
+        if login_in: 
+            addToCart()
+        else:
+            print("請先登入!")
+    elif choice == 6:
+        if login_in:  
+            shopping()
+        else:
+            print("請先登入!")
+    elif choice == 7:
+        print("感謝使用POS系統")
         break
     else:
         print("請輸入有效選項!")
