@@ -88,7 +88,7 @@ while True:
     print("6.結帳")
     print("7.離開系統")
     
-    if not login_in:
+    if login_in==False:
         print("請先登入或註冊!")
         choice=int(input("請選擇功能:"))
     else:
