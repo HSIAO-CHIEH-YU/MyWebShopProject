@@ -6,8 +6,8 @@ import mysqlPython#導入mysql
 #mysqlPython.add_product("Laptop", 1500.99)
 
 # 關閉連線git branch  # 查看所有本地分支
+#mysqlPython.close_connection()
 
-mysqlPython.close_connection()
 #字典{key,value}
 users={}#會員(帳號:密碼)
 products={}#商品(商品名:售價)
@@ -15,22 +15,17 @@ cart={}#購物車
 
 def registr():#註冊
     NewuserName=input("請輸入欲註冊使用者名稱:")
-    if NewuserName in users:
-        print(f"使用者{NewuserName}已經存在!")
-        return
-    NewuserPassWord=input("請輸入欲註冊使用者密碼:")
-    users[NewuserName]=NewuserPassWord
-    print("帳號註冊成功!!!")
+    NewuserPassWord = input("請輸入欲註冊使用者密碼:")
+    if mysqlPython.add_user(NewuserName, NewuserPassWord):  # 使用add_user函數來檢查並註冊使用者
+        users[NewuserName] = NewuserPassWord  # 註冊成功後將使用者名稱和密碼加入字典
     
 def login():#登入
     userName=input("請輸入使用者名稱:")
     userPassWord=input("請輸入使用者密碼:")
-    if(userName in users and users[userName]==userPassWord):
-        print(f"歡迎{userName}回來!")
-        return True
+    if mysqlPython.check_user(userName, userPassWord):
+        return True  # 登入成功
     else:
-        print("登入失敗 帳號或密碼錯誤!")
-        return False
+        return False  # 登入失敗
 #測試用   
 #registr()
 #login()
