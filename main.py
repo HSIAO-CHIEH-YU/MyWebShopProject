@@ -1,12 +1,4 @@
 import mysqlPython#導入mysql
-# 測試新增使用者
-#mysqlPython.add_user("admin", "password123")
-
-# 測試新增商品
-#mysqlPython.add_product("Laptop", 1500.99)
-
-# 關閉連線git branch  # 查看所有本地分支
-#mysqlPython.close_connection()
 
 #字典{key,value}
 users={}#會員(帳號:密碼)
@@ -26,32 +18,21 @@ def login():#登入
         return True  # 登入成功
     else:
         return False  # 登入失敗
-#測試用   
-#registr()
-#login()
 
-def addProduct():#新增商品
-    productName=input("請輸入商品名稱:")
-    if productName in products:
-        print("商品已經存在!")
-        return
-    price=float(input("請輸入商品售價:"))
-    products[productName]=price
-    print(f"已新增商品{productName},{price}元")
+def addProduct():  # 新增商品
+    productName = input("請輸入商品名稱:")
+    price = float(input("請輸入商品售價:"))
     
-#測試用    
-#addProduct()
-#print(products)
+    # 呼叫 mysqlPython.addProduct() 來將商品新增到資料庫
+    if mysqlPython.addProduct(productName, price):
+        print(f"商品 {productName} 已成功加入")
+    else:
+        print(f"商品 {productName} 新增失敗")
 
-def showProduct():#顯示商品列表
-    if not products:
-        print("目前沒有商品")
-        return
-    print("\n商品列表")
-    for productName,price in products.items():
-        print(f"商品{productName}:{price}元")
-#showProduct()
-
+def showProduct():  # 顯示商品列表
+    # 呼叫 mysqlPython.showProduct() 來顯示資料庫中的商品
+    mysqlPython.showProduct()
+    
 def addToCart():#加入購物車
     wantBuy=input("請輸入欲購買的物品:")
     if wantBuy not in products:
@@ -63,11 +44,6 @@ def addToCart():#加入購物車
     else:
         cart[wantBuy]=howMuchWantBuy
     print(f"{wantBuy}已加入購物車,數量為{cart[wantBuy]}個")
-
-#測試  
-#addProduct()
-#showProduct()
-#addToCart()
 
 def shopping():#結帳
     if not cart:
