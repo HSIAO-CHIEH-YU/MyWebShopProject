@@ -15,7 +15,7 @@ def add_user(username,password):#新增使用者
     print("用戶新增成功!")
     
 def add_product(name,price):#新增商品
-    query = "INSERT INTO product (name, price) VALUES (%s, %s)"#INSERT INTO用來向資料表中插入資料的SQL命令
+    query = "INSERT INTO products (name, price) VALUES (%s, %s)"#INSERT INTO用來向資料表中插入資料的SQL命令
     talk.execute(query,(name,price))
     conn.commit()#類似github的快照
     print("商品新增成功!")

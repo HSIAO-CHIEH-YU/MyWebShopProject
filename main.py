@@ -1,3 +1,12 @@
+import mysqlPython#導入mysql
+# 測試新增使用者
+mysqlPython.add_user("admin", "password123")
+
+# 測試新增商品
+mysqlPython.add_product("Laptop", 1500.99)
+
+# 關閉連線
+mysqlPython.close_connection()
 #字典{key,value}
 users={}#會員(帳號:密碼)
 products={}#商品(商品名:售價)
