@@ -28,30 +28,29 @@ def check_user(username, password):  # 登入檢查
     cursor.close()  # 關閉游標
     conn.close()  # 關閉資料庫連接
 
-def addProduct():  # 新增商品
-    productName = input("請輸入商品名稱:")  # 輸入商品名稱
-    # 查詢資料庫中是否已經有此商品
+def addProduct(productName,price):  # 確保這裡有接收參數
+    # 檢查資料庫中是否已經有這個商品
     talk.execute("SELECT * FROM products WHERE name = %s", (productName,))
-    if talk.fetchone():  # 如果資料庫中已經有此商品
-        print(f"商品{productName}已經存在!")
-        return
-
-    price = float(input("請輸入商品售價:"))  # 輸入商品價格
-    # 插入新商品到資料庫
+    if talk.fetchone():  # 如果商品已經存在
+        print(f"商品 {productName} 已經存在!")
+        return False
+    # 新增商品到資料庫
     talk.execute("INSERT INTO products (name, price) VALUES (%s, %s)", (productName, price))
-    conn.commit()  # 提交更改
-    print(f"已新增商品 {productName}, {price}元")  # 顯示成功訊息
+    conn.commit()  # 提交更改到資料庫
+    print(f"已新增商品 {productName}，售價 {price} 元")
+    return True
 
-def showProduct():  # 顯示商品列表
+def showProduct():
     # 查詢資料庫中的所有商品
     talk.execute("SELECT * FROM products")
     products = talk.fetchall()  # 獲取所有商品資料
-    if not products:  # 如果資料庫中沒有商品
+    # 如果資料庫中沒有商品資料
+    if not products:
         print("目前沒有商品")
         return
-
-    print("\n=====商品列表=====")
-    for product in products:  # 顯示所有商品
+    # 顯示商品列表
+    print("\n=====商品列表:=====")
+    for product in products:
         print(f"商品 {product[1]}: {product[2]}元")
         #product[0]是商品id是商品id
         #product[1] 是商品名稱
