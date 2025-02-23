@@ -1,11 +1,12 @@
 import mysqlPython#導入mysql
 # 測試新增使用者
-mysqlPython.add_user("admin", "password123")
+#mysqlPython.add_user("admin", "password123")
 
 # 測試新增商品
-mysqlPython.add_product("Laptop", 1500.99)
+#mysqlPython.add_product("Laptop", 1500.99)
 
-# 關閉連線
+# 關閉連線git branch  # 查看所有本地分支
+
 mysqlPython.close_connection()
 #字典{key,value}
 users={}#會員(帳號:密碼)
