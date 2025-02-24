@@ -38,19 +38,24 @@ def add_user(username, password):  # 新增使用者
 def check_user(username, password):  # 登入檢查
     conn = creat_connet()
     if conn is None:
-        return False ("資料庫連接失敗")
+        print("資料庫連接失敗")
+        return False
     try:
         talk = conn.cursor()
         talk.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
-        if talk.fetchone():
+        result = talk.fetchone()
+        if result:
             return True
         else:
-            return False 
+            return False  # 找不到使用者或密碼錯誤
     except Error as e:
-        return False (f"資料庫操作錯誤: {e}")
+        print(f"資料庫操作錯誤: {e}")
+        return False
     finally:
         if conn:
             conn.close()
+
+
 
 def add_product(product_name, price):  # 新增商品
     conn = creat_connet()
@@ -76,6 +81,7 @@ def show_products():  # 顯示商品
     conn = creat_connet()
     if conn is None:
         print("資料庫連接失敗")
+        return[]
     
     try:
         talk = conn.cursor()
@@ -89,8 +95,10 @@ def show_products():  # 顯示商品
         for product in products:
             product_list.append({"id":product[0],"name":product[1],"price":product[2]})
             print(f"商品:{product[1]} 售價:{product[2]}元")
+            return product_list
     except Error as e:
         print(f"資料庫操作錯誤: {e}")
+        return[]
     finally:
         if conn:
             conn.close()
