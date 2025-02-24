@@ -43,9 +43,9 @@ def check_user(username, password):  # 登入檢查
         talk = conn.cursor()
         talk.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
         if talk.fetchone():
-            return True (f"登入成功!,歡迎{username}")
+            return True
         else:
-            return False ("登入失敗: 無效的使用者名稱或密碼")
+            return False 
     except Error as e:
         return False (f"資料庫操作錯誤: {e}")
     finally:
