@@ -17,20 +17,20 @@ def creat_connet():
 def add_user(username, password):  # 新增使用者
     conn = creat_connet()
     if conn is None:
-        print("資料庫連接失敗")
+        return("資料庫連接失敗")
     
     try:
         talk = conn.cursor()  # 建立一個游標（cursor），讓我們可以對資料庫執行 SQL 查詢。
         talk.execute("SELECT * FROM users WHERE username = %s", (username,))
         if talk.fetchone():
-            print(f"使用者 {username} 已經存在!")
+            return(f"使用者 {username} 已經存在!")
         else: 
             talk.execute("INSERT INTO users (username, password) VALUES (%s, %s)", (username, password))
             conn.commit()  # 類似git的快照
-            print("註冊成功")
+            return("註冊成功")
         
     except Error as e:
-        print(f"資料庫操作錯誤: {e}")
+        return(f"資料庫操作錯誤: {e}")
     finally:
         if conn:
             conn.close()
@@ -38,20 +38,16 @@ def add_user(username, password):  # 新增使用者
 def check_user(username, password):  # 登入檢查
     conn = creat_connet()
     if conn is None:
-        print("資料庫連接失敗")
-        return False
+        return False ("資料庫連接失敗")
     try:
         talk = conn.cursor()
         talk.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
         if talk.fetchone():
-            print(f"登入成功!,歡迎{username}")
-            return True
+            return True (f"登入成功!,歡迎{username}")
         else:
-            print("登入失敗: 無效的使用者名稱或密碼")
-            return False
+            return False ("登入失敗: 無效的使用者名稱或密碼")
     except Error as e:
-        print(f"資料庫操作錯誤: {e}")
-        return False
+        return False (f"資料庫操作錯誤: {e}")
     finally:
         if conn:
             conn.close()
