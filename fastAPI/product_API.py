@@ -1,8 +1,10 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from ..import mysqlPython
+import sys
+sys.path.append("C:/Users/user/Desktop/MyPosProject")
+import mysqlPython  # type: ignore
 
-product_router=APIRouter
+product_router=APIRouter()
 
 class Product(BaseModel):
     name:str

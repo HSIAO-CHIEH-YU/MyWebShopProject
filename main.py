@@ -1,4 +1,5 @@
 import mysqlPython  # 導入mysql
+import requests
 # 字典 {key, value}
 users = {}  # 會員(帳號:密碼)
 products = {}  # 商品(商品名:售價)
@@ -7,22 +8,25 @@ cart = {}  # 購物車
 def registr():  # 註冊
     NewuserName = input("請輸入欲註冊使用者名稱:")
     NewuserPassWord = input("請輸入欲註冊使用者密碼:")
-    mysqlPython.add_user(NewuserName,NewuserPassWord)
+    response = requests.post("http://127.0.0.1:8000/register", json={"username": NewuserName, "password": NewuserPassWord})
+    print(response.json()['message'])
     
 def login(): # 登入
     userName = input("請輸入使用者名稱:")
     userPassWord = input("請輸入使用者密碼:")
-    if mysqlPython.check_user(userName,userPassWord):
-        return True
+    response = requests.post("http://127.0.0.1:8000/login", json={"username": userName, "password": userPassWord})
+    print(response.json()['message'])
     
 def addProduct():  # 新增商品
     productName = input("請輸入商品名稱:")
     price = float(input("請輸入商品售價:"))
-    mysqlPython.add_product(productName,price)
+    response = requests.post("http://127.0.0.1:8000/add_product", json={"name": productName, "price": productPrice})
+    print(response.json()['message'])
 
 def showProduct():  # 顯示商品列表
-    # 呼叫 mysqlPython.showProduct() 來顯示資料庫中的商品
-    mysqlPython.show_products()
+    response = requests.get("http://127.0.0.1:8000/show_products")
+    print(response.json()['products'])
+
 
 def addToCart():  # 加入購物車
     wantBuy = input("請輸入欲購買的物品:")
