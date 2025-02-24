@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from fastAPI.user_API import user_router# 從 fastAPI 資料夾中引入用戶相關的 API 路由
 from fastAPI.product_API import product_router# 從 fastAPI 資料夾中引入商品相關的 API 路由
-
+#user_router--->user_API裡面的user_router=APIRouter()
+#product_router--->product_API裡面的product_router=APIRouter()
 # 創建 FastAPI 應用實例
 app = FastAPI()
 
