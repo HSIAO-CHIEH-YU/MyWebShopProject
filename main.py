@@ -1,5 +1,7 @@
 import mysqlPython  # 導入mysql
+from server_API import app
 import requests
+
 # 字典 {key, value}
 users = {}  # 會員(帳號:密碼)
 products = {}  # 商品(商品名:售價)
@@ -15,12 +17,16 @@ def login(): # 登入
     userName = input("請輸入使用者名稱:")
     userPassWord = input("請輸入使用者密碼:")
     response = requests.post("http://127.0.0.1:8000/login", json={"username": userName, "password": userPassWord})
-    print(response.json()['message'])
-    
+    message=response.json()['message']
+    print(message)
+    if message=="登入成功":
+        return True
+    else:
+        return False
 def addProduct():  # 新增商品
     productName = input("請輸入商品名稱:")
     price = float(input("請輸入商品售價:"))
-    response = requests.post("http://127.0.0.1:8000/add_product", json={"name": productName, "price": productPrice})
+    response = requests.post("http://127.0.0.1:8000/add_product", json={"name": productName, "price": price})
     print(response.json()['message'])
 
 def showProduct():  # 顯示商品列表
