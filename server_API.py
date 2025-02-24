@@ -1,17 +1,14 @@
 from fastapi import FastAPI
-from fastAPI.user_API import router as user_router  # 用戶 API
-from fastAPI.product_API import router as product_router  # 商品 API
+from fastAPI.user_API import user_router# 從 fastAPI 資料夾中引入用戶相關的 API 路由
+from fastAPI.product_API import product_router# 從 fastAPI 資料夾中引入商品相關的 API 路由
 
 # 創建 FastAPI 應用實例
 app = FastAPI()
 
-# 註冊用戶相關的 API 路由，並設定路徑前綴為 "/user"
-app.include_router(user_router, prefix="/user", tags=["User"])
+# 註冊用戶相關的路由到 FastAPI 應用中
+# 這樣將 user_router 中的所有路由都加入到應用中
+app.include_router(user_router)
 
-# 註冊商品相關的 API 路由，並設定路徑前綴為 "/product"
-app.include_router(product_router, prefix="/product", tags=["Product"])
-
-# 啟動應用程式的條件判斷
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+# 註冊商品相關的路由到 FastAPI 應用中
+# 這樣將 product_router 中的所有路由都加入到應用中
+app.include_router(product_router)
