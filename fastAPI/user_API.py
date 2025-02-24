@@ -1,7 +1,5 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-import sys
-sys.path.append("C:/Users/user/Desktop/MyPosProject")
 import mysqlPython # type: ignore
 
 user_router=APIRouter()
