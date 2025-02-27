@@ -1,5 +1,4 @@
 import mysqlPython  # 導入mysql
-from server_API import app
 import requests
 
 # 字典 {key, value}
@@ -10,6 +9,7 @@ cart = {}  # 購物車
 def registr():  # 註冊
     NewuserName = input("請輸入欲註冊使用者名稱:")
     NewuserPassWord = input("請輸入欲註冊使用者密碼:")
+    #向api發送請求
     response = requests.post("http://127.0.0.1:8000/register", json={"username": NewuserName, "password": NewuserPassWord})
     print(response.json()['message'])
     
@@ -31,7 +31,10 @@ def addProduct():  # 新增商品
 
 def showProduct():  # 顯示商品列表
     response = requests.get("http://127.0.0.1:8000/show_products")
-    print(response.json()['products'])
+    data = response.json()
+    global products  # 讓它可以修改外部的 `products` 變數
+    products = {item["name"]: item["price"] for item in data["products"]}
+    print(products)
 
 
 def addToCart():  # 加入購物車
@@ -40,23 +43,26 @@ def addToCart():  # 加入購物車
         print(f"找不到此 {wantBuy} 商品")
         return
     howMuchWantBuy = int(input("請輸入欲購買的數量:"))
-    if wantBuy in cart:
-        cart[wantBuy] = cart[wantBuy] + howMuchWantBuy
-    else:
-        cart[wantBuy] = howMuchWantBuy
+    cart[wantBuy] = cart.get(wantBuy, 0) + howMuchWantBuy
     print(f"{wantBuy} 已加入購物車, 數量為 {cart[wantBuy]} 個")
 
 def shopping():  # 結帳
     if not cart:
         print("您的購物車是空的!")
         return
+    
+    showProduct()  # 確保商品清單最新
+
     totalMoney = 0
     for wantBuy, howMuchWantBuy in cart.items():
-        x = products[wantBuy] * howMuchWantBuy
-        # products 字典裡的 [wantBuy] (想買的東西) = 那個商品的售價
-        # howMuchWantBuy = 上面 cart.items() 裡面的 value 幾個
-        totalMoney = totalMoney + x
-    print(f"總金額為: {totalMoney} 元")
+        if wantBuy not in products:
+            print(f"商品 {wantBuy} 已被移除，無法結帳！")
+            continue
+        totalMoney += products[wantBuy] * howMuchWantBuy
+    if totalMoney == 0:
+        print("沒有可結帳的商品!")
+    else:
+        print(f"總金額為: {totalMoney} 元")
 
 # 主程式
 login_in = False
