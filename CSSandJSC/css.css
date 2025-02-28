@@ -20,13 +20,13 @@
 .botton
 {
     display:flex;/*讓div水平排列*/
-    
+    flex-wrap: wrap; /* 讓按鈕在小屏幕下換行 */
+    justify-content: center; /* 使按鈕居中 */
 }
-.botton_LMR/*讓按鈕自動平分三等份*/
+.botton_LMR
 {
-    flex:auto;
+    flex:auto;/*讓按鈕自動平分三等份*/
     text-align: center; /* 圖片與文字置中 */
-    width: 30%; /* 每個按鈕佔據30%的寬度 */
     margin-bottom: 10px; /* 給予按鈕間隙 */
 }
 .botton-image
@@ -38,4 +38,5 @@
 .textSize
 {
     font-size: 20px;
+    font-weight: bolder;
 }
