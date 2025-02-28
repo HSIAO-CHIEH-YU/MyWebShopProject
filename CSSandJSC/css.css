@@ -1,4 +1,41 @@
-#backgroundColorBody{background-color:#00CACA}
-#title{font-weight:bolder;font: size 24px}
-#backgroundColorSpan{background-color: darkgray}
-#keyWord{font-weight: bold;color:red}
+.backgroundColorBody
+{
+    background-color:#6C7A89;
+    text-align: center;
+}
+.title
+{
+    font-weight:bolder;
+    font-size: 50px;
+}
+.backgroundColorSpan
+{
+    background-color: darkgray;
+    font-size: 30px;
+}
+.keyWord
+{
+    font-weight: bold;color:red;
+}
+.botton
+{
+    display:flex;/*讓div水平排列*/
+    
+}
+.botton_LMR/*讓按鈕自動平分三等份*/
+{
+    flex:auto;
+    text-align: center; /* 圖片與文字置中 */
+    width: 30%; /* 每個按鈕佔據30%的寬度 */
+    margin-bottom: 10px; /* 給予按鈕間隙 */
+}
+.botton-image
+ {
+    width: 90%;;  /* 圖片寬度佔據容器寬度 */
+    height: 400px;  /* 圖片高度自動調整保持比例 */
+    object-fit: cover;  /* 確保圖片填滿容器，但不變形 */
+}
+.textSize
+{
+    font-size: 20px;
+}
