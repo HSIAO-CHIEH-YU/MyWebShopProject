@@ -8,6 +8,8 @@ from fastAPI.product_API import product_router# 從 fastAPI 資料夾中引入�
 app = FastAPI()
 
 # 設定 CORS 策略，允許特定來源的請求
+#不然google不允許不同來源的請求
+# CORSMiddleware 是 FastAPI 提供的中間件，用來處理跨來源請求（CORS）的問題
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # 設置為 "*" 代表允許來自所有域的請求
