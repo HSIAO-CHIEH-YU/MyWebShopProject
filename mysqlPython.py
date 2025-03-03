@@ -27,7 +27,7 @@ def add_user(username, password):  # 新增使用者
         else: 
             talk.execute("INSERT INTO users (username, password) VALUES (%s, %s)", (username, password))
             conn.commit()  # 類似git的快照
-            return("註冊成功")
+            return "註冊成功"
         
     except Error as e:
         return f"資料庫操作錯誤: {e}"
