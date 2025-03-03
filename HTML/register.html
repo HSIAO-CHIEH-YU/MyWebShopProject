@@ -9,7 +9,7 @@
     <h2>註冊</h2>  <!-- 標題，顯示為「註冊」 -->
     
     <!-- 表單，當提交時會觸發 JavaScript 函數 register() -->
-    <form id="register">
+    <form id="registerForm">
         <label for="username">用戶名:</label>  <!-- 用戶名標籤 -->
         <input type="text" id="username" name="username" required>  <!-- 用戶名輸入框，必須填寫 -->
         <br>
@@ -23,7 +23,7 @@
 
     <script>
         // 監聽註冊表單提交事件
-        document.getElementById("register").addEventListener("submit", function(event){
+        document.getElementById("registerForm").addEventListener("submit", function(event){
             event.preventDefault();  // 阻止表單的默認提交行為
             
             const username = document.getElementById("username").value;  // 獲取用戶名
@@ -38,8 +38,14 @@
                 body: JSON.stringify({ username: username, password: password })  // 將用戶名和密碼作為 JSON 傳送
             })
             .then(response => response.json())  // 解析 JSON 響應
-            .then(data => alert(data.message))  // 顯示來自後端的訊息
-            .catch(error => console.log(error));  // 捕獲錯誤並輸出到控制台
+            .then(data => {
+                alert(data.message);// 顯示來自後端的訊息
+                if (data.message == "註冊成功")
+                {
+                    window.location.href = "login.html";  // 跳轉到登入頁面
+                }
+            })
+            .catch(error => alert.log(error));  // 捕獲錯誤並彈出通知
         });
     </script>
 </body>
