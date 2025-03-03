@@ -30,7 +30,7 @@ def add_user(username, password):  # 新增使用者
             return("註冊成功")
         
     except Error as e:
-        return(f"資料庫操作錯誤: {e}")
+        return f"資料庫操作錯誤: {e}"
     finally:
         if conn:
             conn.close()
@@ -39,40 +39,40 @@ def check_user(username, password):  # 登入檢查
     conn = creat_connet()
     if conn is None:
         print("資料庫連接失敗")
-        return False
+        return "資料庫連接失敗"
     try:
         talk = conn.cursor()
         talk.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
         result = talk.fetchone()
         if result:
-            return True
+            return "登入成功"
         else:
-            return False  # 找不到使用者或密碼錯誤
+            return "找不到使用者或密碼錯誤"  # 找不到使用者或密碼錯誤
     except Error as e:
         print(f"資料庫操作錯誤: {e}")
-        return False
+        return "資料庫操作錯誤"
     finally:
         if conn:
             conn.close()
-
-
 
 def add_product(product_name, price):  # 新增商品
     conn = creat_connet()
     if conn is None:
         print("資料庫連接失敗")
+        return "資料庫連接失敗"
     
     try:
         talk = conn.cursor()
         talk.execute("SELECT * FROM products WHERE name = %s", (product_name,))
         if talk.fetchone():
-            print(f"商品 {product_name} 已經存在!")
+            return f"商品 {product_name} 已經存在!"
         
         talk.execute("INSERT INTO products (name, price) VALUES (%s, %s)", (product_name, price))
         conn.commit()
-        print(f"商品 {product_name} 已成功新增!,售價是{price}")
+        return f"商品 {product_name} 已成功新增!,售價是{price}"
     except Error as e:
         print(f"資料庫操作錯誤: {e}")
+        return "資料庫操作錯誤"
     finally:
         if conn:
             conn.close()
@@ -81,24 +81,23 @@ def show_products():  # 顯示商品
     conn = creat_connet()
     if conn is None:
         print("資料庫連接失敗")
-        return[]
+        return "資料庫連接失敗"
     
     try:
         talk = conn.cursor()
         talk.execute("SELECT * FROM products")
         products = talk.fetchall()
         if not products:
-            print("目前沒有商品")
-    
+            return "目前沒有商品"
         product_list=[]
         print("=====商品列表=====")
         for product in products:
             product_list.append({"id":product[0],"name":product[1],"price":product[2]})
             print(f"商品:{product[1]} 售價:{product[2]}元")
-            return product_list
+        return product_list
     except Error as e:
         print(f"資料庫操作錯誤: {e}")
-        return[]
+        return "資料庫操作錯誤"
     finally:
         if conn:
             conn.close()

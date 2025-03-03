@@ -11,15 +11,19 @@ class User(BaseModel):# 定義一個 Pydantic 數據模型類別，用來驗證�
 @user_router.post("/register")#定義一個POST請求，用來處理用戶註冊
 # 定義註冊函數，使用 async 是為了支持異步操作，這樣可以處理更多請求
 async def register(user:User):# 路由接收來自請求的 user 資料（必須是符合 User 類別的格式）
-    mysqlPython.add_user(user.username,user.password)
-    return{"message":"註冊成功"}
+    result=mysqlPython.add_user(user.username,user.password)
+    if result=="註冊成功":
+        return{"message":"註冊成功"}
+    else:
+        return{"message":result}
 
 @user_router.post("/login")
 async def login(user:User):
-    if mysqlPython.check_user(user.username,user.password):
+    result=mysqlPython.check_user(user.username,user.password)
+    if result=="登入成功":
         return {"message":"登入成功"}
     else:
-        return{"message":"登入失敗"}
+        return{"message":result}
     
 # HTTP方法	作用	        適用場景
 # GET	  取得資料	   查詢用戶、查詢商品清單

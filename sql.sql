@@ -1,4 +1,4 @@
-CREATE DATABASE shop_db;
+create database shop_db;
 
 USE shop_db;
 
