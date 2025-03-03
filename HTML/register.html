@@ -1,9 +1,46 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+<!DOCTYPE html>  <!-- 設定文檔類型為 HTML5 -->
+<html lang="en">  <!-- 設定語言為英文 -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>註冊帳號</title>
+    <meta charset="UTF-8">  <!-- 設定字符編碼為 UTF-8 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  <!-- 設定響應式設計，根據螢幕大小調整顯示 -->
+    <title>註冊頁面</title>  <!-- 設定網頁的標題 -->
 </head>
+<body>
+    <h2>註冊</h2>  <!-- 標題，顯示為「註冊」 -->
+    
+    <!-- 表單，當提交時會觸發 JavaScript 函數 register() -->
+    <form id="register">
+        <label for="username">用戶名:</label>  <!-- 用戶名標籤 -->
+        <input type="text" id="username" name="username" required>  <!-- 用戶名輸入框，必須填寫 -->
+        <br>
+
+        <label for="password">密碼:</label>  <!-- 密碼標籤 -->
+        <input type="password" id="password" name="password" required>  <!-- 密碼輸入框，必須填寫 -->
+        <br>
+        
+        <button type="submit">註冊</button>  <!-- 註冊按鈕，觸發提交表單 -->
+    </form>
+
+    <script>
+        // 監聽註冊表單提交事件
+        document.getElementById("register").addEventListener("submit", function(event){
+            event.preventDefault();  // 阻止表單的默認提交行為
+            
+            const username = document.getElementById("username").value;  // 獲取用戶名
+            const password = document.getElementById("password").value;  // 獲取密碼
+
+            // 發送 POST 請求到後端 API 進行註冊
+            fetch("http://127.0.0.1:8000/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"  // 設定請求的內容類型為 JSON
+                },
+                body: JSON.stringify({ username: username, password: password })  // 將用戶名和密碼作為 JSON 傳送
+            })
+            .then(response => response.json())  // 解析 JSON 響應
+            .then(data => alert(data.message))  // 顯示來自後端的訊息
+            .catch(error => console.log(error));  // 捕獲錯誤並輸出到控制台
+        });
+    </script>
 </body>
 </html>
