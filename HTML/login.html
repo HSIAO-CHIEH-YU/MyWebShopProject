@@ -11,7 +11,7 @@
         <div class="mainpage">  <!-- 主頁面 -->
             <h1>用戶登入!</h1>  <!-- 標題，顯示為「註冊」 -->
         <!-- 表單，當提交時會觸發 JavaScript 函數 register() -->
-        <form id="registerForm">
+        <form id="loginForm">
             <label class="lable" for="username">用戶名:</label>  <!-- 用戶名標籤 -->
             <input type="text" id="username" name="username" required>  <!-- 用戶名輸入框，必須填寫 -->
             <br>
@@ -38,9 +38,15 @@
                 body: JSON.stringify({ username: username, password: password })
             })
             .then(response => response.json())
-            .then(data => alert(data.message))
+            .then(data => {
+                alert(data.message);// 顯示來自後端的訊息
+                if (data.message == "登入成功")
+                {
+                    window.location.href = "pos.html";  // 跳轉到pos頁面
+                }
+            })
             .catch(error => alert.log(error));
-    }); 
+        }); 
     </script>
     <div class="botton">
         <div class="botton_LMR">
