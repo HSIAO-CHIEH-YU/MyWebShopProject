@@ -15,9 +15,9 @@ document.getElementById("registerForm").addEventListener("submit", function(even
     })
     .then(response => response.json())  // 解析 JSON 響應
     .then(data => {
-        alert(data.message);// 顯示來自後端的訊息
+        if (data.message == "註冊成功")
         {
-            if (data.message == "註冊成功")
+            alert(data.message);// 顯示來自後端的訊息
             window.location.href = "login.html";  // 跳轉到登入頁面
         }
     })
