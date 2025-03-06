@@ -13,9 +13,9 @@ document.getElementById("loginForm").addEventListener("submit", function(event){
     })
     .then(response => response.json())
     .then(data => {
-        alert(data.message);// 顯示來自後端的訊息
         if (data.message == "登入成功")
         {
+            alert(data.message);// 顯示來自後端的訊息
             window.location.href = "pos.html";  // 跳轉到pos頁面
         }
     })
