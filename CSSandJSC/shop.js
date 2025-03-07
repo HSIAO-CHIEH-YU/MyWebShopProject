@@ -12,4 +12,5 @@ async function addToCart(user_id, product_id, many) {
         alert("加入購物車失敗");
     }
 }
-   
+//當寫 let response = await fetch(...) 時，這段代碼會發送一個 HTTP 請求，並且會等待該請求的回應。
+//await 會讓程式碼等到 fetch() 執行完並得到回應後，再將結果儲存到 response 變數中。
