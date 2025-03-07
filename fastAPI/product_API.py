@@ -20,4 +20,3 @@ async def add_product(product:Product):
 async def show_product():
     products=mysqlPython.show_products()
     return{"products":products}
-

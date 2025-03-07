@@ -16,7 +16,7 @@ document.getElementById("loginForm").addEventListener("submit", function(event){
         if (data.message == "登入成功")
         {
             alert(data.message);// 顯示來自後端的訊息
-            window.location.href = "pos.html";  // 跳轉到pos頁面
+            window.location.href = "shop.html";  // 跳轉到pos頁面
         }
     })
     .catch(error => alert.log(error));

@@ -13,3 +13,12 @@ CREATE TABLE products (
     name VARCHAR(100) NOT NULL,
     price DECIMAL(10, 2) NOT NULL
 );
+
+CREATE TABLE productsCar (
+    id INT AUTO_INCREMENT PRIMARY KEY,              -- 設置 `id` 為主鍵，並使用 AUTO_INCREMENT 讓它自動遞增
+    user_id INT NOT NULL,                           -- `user_id`，代表購物車中的使用者 ID，不能為 NULL
+    product_id INT NOT NULL,                        -- `product_id`，代表購物車中的產品 ID，不能為 NULL
+    many INT NOT NULL,                              -- `many`，代表該產品的購買數量，不能為 NULL
+    FOREIGN KEY (user_id) REFERENCES users(id),     -- `user_id` 外鍵，參考 `users` 資料表的 `id` 欄位
+    FOREIGN KEY (product_id) REFERENCES products(id)-- `product_id` 外鍵，參考 `products` 資料表的 `id` 欄位
+);

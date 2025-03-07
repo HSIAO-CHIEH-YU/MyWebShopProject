@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>商品頁面</title>
+</head>
+<body>
+    <h1>商品列表</h1>
+
+    <div>
+        <!-- 假設這是你的商品列表，商品 ID 和名稱動態生成 -->
+        <div class="product" id="1">
+            <h3>商品名稱: 玩具</h3>
+            <p>價格: 300 元</p>
+            <button onclick="addToCart(1, 1, 1)">加入購物車</button> <!-- 使用者 ID,商品 ID ,購買數量 (每次點擊即加入 1 個) -->
+        </div>
+        
+        <div class="product" id="2">
+            <h3>商品名稱: 電腦</h3>
+            <p>價格: 38000 元</p>
+            <button onclick="addToCart(1, 2, 1)">加入購物車</button> <!-- 使用者 ID,商品 ID ,購買數量 (每次點擊即加入 1 個) -->
+        </div>
+
+        <!-- 更多商品 -->
+    </div>
+    <script src="../CSSandJSC/shop.js"></script>
+</body>
+</html>

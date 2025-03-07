@@ -90,10 +90,8 @@ def show_products():  # 顯示商品
         if not products:
             return "目前沒有商品"
         product_list=[]
-        print("=====商品列表=====")
         for product in products:
             product_list.append({"id":product[0],"name":product[1],"price":product[2]})
-            print(f"商品:{product[1]} 售價:{product[2]}元")
         return product_list
     except Error as e:
         print(f"資料庫操作錯誤: {e}")
@@ -101,3 +99,48 @@ def show_products():  # 顯示商品
     finally:
         if conn:
             conn.close()
+
+def addToCart(user_id, product_id, many):  # 加入購物車
+    conn = creat_connet()
+    if conn is None:
+        print("資料庫連接失敗")
+        return "資料庫連接失敗"
+    
+    try:
+        talk = conn.cursor()
+        
+        # 確認使用者是否存在
+        talk.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+        user = talk.fetchone()
+        if not user:
+            return "找不到使用者"
+        
+        # 確認商品是否存在於 products 表中
+        talk.execute("SELECT * FROM products WHERE id = %s", (product_id,))
+        product = talk.fetchone()
+        if not product:
+            return "找不到商品"
+        
+        # 查詢商品是否已經在購物車中
+        talk.execute("SELECT * FROM productsCar WHERE user_id = %s AND product_id = %s", (user_id, product_id))
+        existing_product = talk.fetchone()
+        
+        if existing_product:
+            # 如果商品已存在，更新數量
+            new_quantity = existing_product[3] + many  # 假設 'many' 是第四個欄位
+            talk.execute("UPDATE productsCar SET many = %s WHERE user_id = %s AND product_id = %s", 
+                         (new_quantity, user_id, product_id))
+        else:
+            # 如果商品不在購物車中，插入新資料
+            talk.execute("INSERT INTO productsCar (user_id, product_id, many) VALUES (%s, %s, %s)", 
+                         (user_id, product_id, many))
+        
+        conn.commit()
+        return "加入購物車成功"
+    except Error as e:
+        print(f"資料庫操作錯誤: {e}")
+        return "資料庫操作錯誤"
+    finally:
+        if conn:
+            conn.close()
+

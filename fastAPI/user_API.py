@@ -25,6 +25,14 @@ async def login(user:User):
     else:
         return{"message":result}
     
+@user_router.get("/addToCart")
+async def addToCart(user_id: int, product_id: int, many: int):
+    result=mysqlPython.addToCart(user_id, product_id, many)
+    if result=="加入購物車成功":
+        return {"message":"加入購物車成功"}
+    else:
+        return{"message":result}
+    
 # HTTP方法	作用	        適用場景
 # GET	  取得資料	   查詢用戶、查詢商品清單
 # POST	  新增資料	     註冊帳號、新增商品
