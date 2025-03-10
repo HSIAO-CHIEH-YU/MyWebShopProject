@@ -55,7 +55,7 @@ def check_user(username, password):  # 登入檢查
         if conn:
             conn.close()
 
-def add_product(product_name, price):  # 新增商品
+def add_product(product_name, price, have):  # 新增商品 #have是庫存
     conn = creat_connet()
     if conn is None:
         print("資料庫連接失敗")
@@ -67,9 +67,68 @@ def add_product(product_name, price):  # 新增商品
         if talk.fetchone():
             return f"商品 {product_name} 已經存在!"
         
-        talk.execute("INSERT INTO products (name, price) VALUES (%s, %s)", (product_name, price))
+        talk.execute("INSERT INTO products (name, price, have) VALUES (%s, %s, %s)", (product_name, price, have))
         conn.commit()
-        return f"商品 {product_name} 已成功新增!,售價是{price}"
+        return f"商品 {product_name} 已成功新增!,售價是{price}元,庫存數量有{have}個"
+    except Error as e:
+        print(f"資料庫操作錯誤: {e}")
+        return "資料庫操作錯誤"
+    finally:
+        if conn:
+            conn.close()
+            
+def delete_product(product_name):#刪除商品
+    conn=creat_connet()
+    if conn is None:
+        print("資料庫連接失敗")
+        return "資料庫連接失敗"
+    try:
+        talk=conn.cursor()
+        talk.execute("DELETE FROM products WHERE name = %s",(product_name,))
+        conn.commit()
+        if talk.rowcount==0:
+            return f"商品{product_name}不存在"
+        return f"商品{product_name}已刪除"
+    except Error as e:
+        print(f"資料庫操作錯誤: {e}")
+        return "資料庫操作錯誤"
+    finally:
+        if conn:
+            conn.close()
+
+def update_product(product_name,new_have,new_price):#更新庫存或是價格
+    conn=creat_connet()
+    if conn is None:
+        print("資料庫連接失敗")
+        return "資料庫連接失敗"
+    try:
+        talk=conn.cursor()
+        talk.execute("SELECT * FROM products WHERE name = %s",(product_name,))
+        if not talk.fetchone():
+            return f"商品{product_name}不存在"
+        talk.execute("UPDATE products SET have = %s, price = %s WHERE name = %s",(new_have,new_price,product_name))
+        conn.commit()
+        return f"商品{product_name}的庫存已更新為{new_have}個,價格已更新為{new_price}元"
+    except Error as e:
+        print(f"資料庫操作錯誤: {e}")
+        return "資料庫操作錯誤"
+    finally:
+        if conn:
+            conn.close()
+            
+def update_product_name(old_name,new_name):#更新商品名稱
+    conn=creat_connet()
+    if conn is None:
+        print("資料庫連接失敗")
+        return "資料庫連接失敗"
+    try:
+        talk=conn.cursor()
+        talk.execute("SELECT * FROM products WHERE name = %s",(old_name,))
+        if not talk.fetchone():
+            return f"商品{old_name}不存在"
+        talk.execute("UPDATE products SET name = %s WHERE name = %s",(new_name,old_name))
+        conn.commit()
+        return f"商品{old_name}已更新為{new_name}"
     except Error as e:
         print(f"資料庫操作錯誤: {e}")
         return "資料庫操作錯誤"
@@ -91,7 +150,7 @@ def show_products():  # 顯示商品
             return "目前沒有商品"
         product_list=[]
         for product in products:
-            product_list.append({"id":product[0],"name":product[1],"price":product[2]})
+            product_list.append({"id":product[0],"name":product[1],"price":product[2],"have":product[3]})
         return product_list
     except Error as e:
         print(f"資料庫操作錯誤: {e}")
