@@ -203,3 +203,49 @@ def addToCart(user_id, product_id, many):  # 加入購物車
         if conn:
             conn.close()
 
+def show_cart(user_id):  # 顯示購物車
+    conn = creat_connet()
+    if conn is None:
+        print("資料庫連接失敗")
+        return "資料庫連接失敗"
+    
+    try:
+        talk = conn.cursor()
+        talk.execute("SELECT * FROM productsCar WHERE user_id = %s", (user_id,))
+        productsCar = talk.fetchall()
+        if not productsCar:
+            return "目前購物車是空的"
+        product_list=[]
+        for product in productsCar:
+            product_list.append({"user_id":product[0],"product_id":product[1],"many":product[2]})
+        return product_list
+    except Error as e:
+        print(f"資料庫操作錯誤: {e}")
+        return "資料庫操作錯誤"
+    finally:
+        if conn:
+            conn.close()
+
+def delete_from_cart(user_id, product_id):  # 從購物車刪除商品
+    conn = creat_connet()
+    if conn is None:
+        print("資料庫連接失敗")
+        return "資料庫連接失敗"
+    
+    try:
+        talk = conn.cursor()
+        talk.execute("SELECT * FROM productsCar WHERE user_id = %s AND product_id = %s", (user_id, product_id))
+        product = talk.fetchone()
+
+        if not product:
+            return "購物車中找不到該商品"
+        
+        talk.execute("DELETE FROM productsCar WHERE user_id = %s AND product_id = %s", (user_id, product_id))
+        conn.commit()
+        return "刪除成功"
+    except Error as e:
+        print(f"資料庫操作錯誤: {e}")
+        return "資料庫操作錯誤"
+    finally:
+        if conn:
+            conn.close()

@@ -49,3 +49,13 @@ async def update_product_name(updateproduct:updateProduct):
         return{"message":result}
     else:
         return{"message":f"商品:{updateproduct.old_name}已更新為{updateproduct.new_name}"}
+    
+@product_router.get("/show_cart")
+async def show_cart(user_id:int):
+    result=mysqlPython.show_cart(user_id)
+    return result
+
+@product_router.delete("/delete_cart")
+async def delete_cart(user_id:int,product_id:int):
+    result=mysqlPython.delete_from_cart(user_id,product_id)
+    return result
