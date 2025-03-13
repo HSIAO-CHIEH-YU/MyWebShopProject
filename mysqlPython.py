@@ -1,5 +1,6 @@
 import mysql.connector
 from mysql.connector import Error
+import datetime
 
 def creat_connet():
     try:
@@ -246,6 +247,51 @@ def delete_from_cart(user_id, product_id):  # 從購物車刪除商品
     except Error as e:
         print(f"資料庫操作錯誤: {e}")
         return "資料庫操作錯誤"
+    finally:
+        if conn:
+            conn.close()
+
+def buy(user_id):  #結帳
+    conn = creat_connet()
+    if conn is None:
+        print("資料庫連接失敗")
+        return "資料庫連接失敗"
+    
+    try:
+        talk = conn.cursor()
+        
+        # 1. 查詢購物車中所有商品及數量，並計算總金額
+        talk.execute("SELECT products.id, products.price, productsCar.many FROM productsCar JOIN products ON productsCar.product_id = products.id WHERE productsCar.user_id = %s", (user_id,))
+        
+        products_in_cart = talk.fetchall()
+        
+        if not products_in_cart:
+            return "購物車是空的，無法結帳"
+        
+        total_price = 0
+        for product in products_in_cart:
+            total_price += product[1] * product[2]  #product[0]=商品id # price * many
+        
+        # 2. 插入訂單到 orders 資料表
+        order_time = datetime.now()
+        talk.execute("INSERT INTO orders (user_id, total_price, order_time)VALUES (%s, %s, %s)", (user_id, total_price, order_time))
+        # 取得剛插入的訂單 ID
+        order_id = talk.lastrowid
+        
+        # 3. 插入每一項訂單詳情到 order_details 資料表
+        for product in products_in_cart:
+            talk.execute("INSERT INTO order_details (order_id, product_id, many, price)VALUES (%s, %s, %s, %s)", (order_id, product[0], product[2], product[1]))
+        
+        # 4. 結帳後清空購物車
+        talk.execute("DELETE FROM productsCar WHERE user_id = %s", (user_id,))
+        
+        conn.commit()
+        return f"結帳成功，訂單ID為 {order_id}，總金額：{total_price} 元"
+    
+    except Error as e:
+        print(f"資料庫操作錯誤: {e}")
+        return "資料庫操作錯誤"
+    
     finally:
         if conn:
             conn.close()

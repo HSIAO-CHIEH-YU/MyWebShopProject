@@ -22,3 +22,18 @@ CREATE TABLE productsCar (
     FOREIGN KEY (user_id) REFERENCES users(id),     -- `user_id` 外鍵，參考 `users` 資料表的 `id` 欄位
     FOREIGN KEY (product_id) REFERENCES products(id)-- `product_id` 外鍵，參考 `products` 資料表的 `id` 欄位
 );
+
+CREATE TABLE orders (                             -- 建立 `orders` 資料表 下訂單的使用者
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    total_price FLOAT,
+    order_time DATETIME
+);
+
+CREATE TABLE order_details (            -- 建立 `order_details` 資料表，用來紀錄訂單的詳細資訊
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    product_id INT,
+    many INT,
+    price FLOAT
+);

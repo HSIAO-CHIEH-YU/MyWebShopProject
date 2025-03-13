@@ -59,3 +59,8 @@ async def show_cart(user_id:int):
 async def delete_cart(user_id:int,product_id:int):
     result=mysqlPython.delete_from_cart(user_id,product_id)
     return result
+
+@product_router.post("/buy_cart")
+async def buy_cart(user_id:int):
+    result=mysqlPython.buy(user_id)
+    return {"message":result}
