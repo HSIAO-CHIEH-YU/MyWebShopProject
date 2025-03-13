@@ -259,10 +259,8 @@ def buy(user_id):  #結帳
     
     try:
         talk = conn.cursor()
-        
         # 1. 查詢購物車中所有商品及數量，並計算總金額
         talk.execute("SELECT products.id, products.price, productsCar.many FROM productsCar JOIN products ON productsCar.product_id = products.id WHERE productsCar.user_id = %s", (user_id,))
-        
         products_in_cart = talk.fetchall()
         
         if not products_in_cart:
