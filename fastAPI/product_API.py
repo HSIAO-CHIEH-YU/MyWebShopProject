@@ -2,7 +2,6 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 import mysqlPython  # type: ignore
 from typing import Optional
-from urllib.parse import unquote
 
 product_router=APIRouter()
 
@@ -27,28 +26,16 @@ async def show_product():
 
 @product_router.delete("/delete_product/{product_name}")
 async def delete_product(product_name:str):
-    result=mysqlPython.delete_product_by_name(product_name)
+    result=mysqlPython.delete_product_b(product_name)
     if result=="商品不存在":
         return{"message":f"商品:{product_name}不存在"}
     else:
         return{"message":f"商品:{product_name}已刪除"}
     
-
-
 @product_router.put("/update_product/{name}")
 async def update_product(name: str, product: Product):
-    # 解碼商品名稱
-    decoded_name = unquote(name)
-    print(f"解碼後的商品名稱: {decoded_name}")
-    
-    result = mysqlPython.update_product_details_by_name(
-        decoded_name,
-        new_name=product.new_name,
-        new_price=product.price,
-        new_have=product.have
-    )
+    result = mysqlPython.update_product_details_by_name(name,new_name=product.new_name,new_price=product.price,new_have=product.have)
     return {"message": result}
-
 
 @product_router.get("/show_cart")
 async def show_cart(user_id:int):
