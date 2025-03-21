@@ -1,0 +1,134 @@
+.backgroundColorBody
+{
+    background-color:#6C7A89;
+    text-align: center;
+}
+.title
+{
+    font-weight:bolder;
+    font-size: 50px;
+}
+.backgroundColorSpan
+{
+    background-color: darkgray;
+    font-size: 30px;
+}
+.keyWord
+{
+    font-weight: bold;color:red;
+}
+.botton
+{
+    display:flex;/*讓div水平排列*/
+    justify-content: center; /* 使按鈕居中 */
+}
+.botton_LMR
+{
+    flex:auto;/*讓按鈕自動平分三等份*/
+    text-align: center; /* 圖片與文字置中 */
+    margin-bottom: 10px; /* 給予按鈕間隙 */
+}
+.botton-image
+ {
+    width: 90%;;  /* 圖片寬度佔據容器寬度 */
+    height: 400px;  /* 圖片高度自動調整保持比例 */
+    object-fit: cover;  /* 確保圖片填滿容器，但不變形 */
+}
+.textSize
+{
+    font-size: 20px;
+    font-weight: bolder;
+}
+/* 螢幕寬度小於768px（手機） */
+@media screen and (max-width: 768px) 
+{
+    .botton
+    {
+        flex-wrap: wrap; /* 讓按鈕在小屏幕下換行 */
+    }
+    .botton_LMR 
+    {
+        width: 100%;  /* 每個按鈕佔滿整行 */
+    }
+    .botton-image
+    {
+        width: 90%;  /* 圖片寬度稍微縮小，適應小屏幕 */
+        height: 200px;  /* 調整圖片高度，讓它適應小螢幕 */
+    }
+    .title 
+    {
+        font-size: 40px;  /* 標題字型縮小 */
+    }
+    .backgroundColorSpan 
+    {
+        font-size: 25px;  /* 調整背景文字大小 */
+    }
+    .textSize 
+    {
+        font-size: 16px;  /* 調整按鈕文字大小 */
+    }
+}
+
+/* 螢幕寬度大於768px 且小於1024px（平板） */
+@media screen and (min-width: 768px) and (max-width: 1024px) 
+{
+    .botton
+    {
+        flex-wrap: wrap; /* 讓按鈕在小屏幕下換行 */
+    }
+    .botton_LMR 
+    {
+        width: 45%;  /* 每個按鈕佔據45%的寬度 */
+    }
+    .botton-image 
+    {
+        width: 90%;  /* 圖片寬度占容器的90% */
+        height: 300px;  /* 圖片高度稍微調大 */
+    }
+    .title 
+    {
+        font-size: 45px;  /* 調整標題字型大小 */
+    }
+    .backgroundColorSpan 
+    {
+        font-size: 28px;  /* 調整背景文字大小 */
+    }
+    .textSize 
+    {
+        font-size: 18px;  /* 調整文字大小 */
+    }
+}
+
+/* 螢幕寬度大於1024px（桌面） */
+@media screen and (min-width: 1024px) 
+{
+    .botton
+    {
+        flex-wrap: wrap; /* 讓按鈕在小屏幕下換行 */
+    }
+    .botton_LMR 
+    {
+        width: 30%;  /* 每個按鈕佔據30%的寬度 */
+    }
+
+    .botton-image 
+    {
+        width: 90%;  /* 圖片寬度占容器的100% */
+        height: 400px;  /* 設置圖片高度 */
+    }
+
+    .title 
+    {
+        font-size: 50px;  /* 標題字型大小 */
+    }
+
+    .backgroundColorSpan 
+    {
+        font-size: 30px;  /* 背景文字大小 */
+    }
+
+    .textSize 
+    {
+        font-size: 20px;  /* 按鈕文字大小 */
+    }
+}
