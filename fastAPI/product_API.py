@@ -1,17 +1,16 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 import mysqlPython  # type: ignore
+from typing import Optional
+from urllib.parse import unquote
 
 product_router=APIRouter()
 
 class Product(BaseModel):
     name:str
-    price:float
-    have:int
-
-class updateProduct(BaseModel):
-    old_name:str
-    new_name:str
+    price:Optional[float]=None
+    have:Optional[int]=None
+    new_name:Optional[str]=None
 
 @product_router.post("/add_product")
 async def add_product(product:Product):
@@ -26,30 +25,31 @@ async def show_product():
     products=mysqlPython.show_products()
     return{"products":products}
 
-@product_router.delete("/delete_product")
+@product_router.delete("/delete_product/{product_name}")
 async def delete_product(product_name:str):
-    result=mysqlPython.delete_product(product_name)
+    result=mysqlPython.delete_product_by_name(product_name)
     if result=="商品不存在":
         return{"message":f"商品:{product_name}不存在"}
     else:
         return{"message":f"商品:{product_name}已刪除"}
     
-@product_router.put("/update_product")
-async def update_product(product:Product):
-    result=mysqlPython.update_product(product.name,product.have,product.price)
-    if "不存在" in result:
-        return{"message":result}
-    else:
-        return{"message":f"商品:{product.name}已更新,單價為{product.price}元,庫存為{product.have}"}
+
+
+@product_router.put("/update_product/{name}")
+async def update_product(name: str, product: Product):
+    # 解碼商品名稱
+    decoded_name = unquote(name)
+    print(f"解碼後的商品名稱: {decoded_name}")
     
-@product_router.put("/update_product_name")
-async def update_product_name(updateproduct:updateProduct):
-    result=mysqlPython.update_product_name(updateproduct.old_name,updateproduct.new_name)
-    if "不存在" in result:
-        return{"message":result}
-    else:
-        return{"message":f"商品:{updateproduct.old_name}已更新為{updateproduct.new_name}"}
-    
+    result = mysqlPython.update_product_details_by_name(
+        decoded_name,
+        new_name=product.new_name,
+        new_price=product.price,
+        new_have=product.have
+    )
+    return {"message": result}
+
+
 @product_router.get("/show_cart")
 async def show_cart(user_id:int):
     result=mysqlPython.show_cart(user_id)

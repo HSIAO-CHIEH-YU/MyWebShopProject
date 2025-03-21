@@ -20,7 +20,9 @@ async def register(user:User):# 路由接收來自請求的 user 資料（必須
 @user_router.post("/login")
 async def login(user:User):
     result=mysqlPython.check_user(user.username,user.password)
-    if result=="登入成功":
+    if result=="管理員登入成功":
+        return {"message":"管理員登入成功"}
+    elif result=="登入成功":
         return {"message":"登入成功"}
     else:
         return{"message":result}

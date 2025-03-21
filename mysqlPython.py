@@ -45,8 +45,12 @@ def check_user(username, password):  # 登入檢查
         talk = conn.cursor()
         talk.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
         result = talk.fetchone()
+        
         if result:
-            return "登入成功"
+            if username=="admin" and password=="admin123":
+                return "管理員登入成功"
+            else:
+                return "登入成功"
         else:
             return "找不到使用者或密碼錯誤"  # 找不到使用者或密碼錯誤
     except Error as e:
@@ -78,64 +82,64 @@ def add_product(product_name, price, have):  # 新增商品 #have是庫存
         if conn:
             conn.close()
             
-def delete_product(product_name):#刪除商品
-    conn=creat_connet()
+
+def delete_product_by_name(product_name: str):#刪除商品
+    conn = creat_connet()
     if conn is None:
-        print("資料庫連接失敗")
         return "資料庫連接失敗"
+    
     try:
-        talk=conn.cursor()
-        talk.execute("DELETE FROM products WHERE name = %s",(product_name,))
-        conn.commit()
-        if talk.rowcount==0:
-            return f"商品{product_name}不存在"
-        return f"商品{product_name}已刪除"
+        talk = conn.cursor()
+        
+        # 查找商品是否存在
+        talk.execute("SELECT * FROM products WHERE name = %s", (product_name,))
+        if not talk.fetchone():
+            return f"商品 {product_name} 不存在"
+        
+        # 刪除商品
+        talk.execute("DELETE FROM products WHERE name = %s", (product_name,))
+        conn.commit()  # 提交更改
+        return f"商品 {product_name} 已被刪除"
     except Error as e:
-        print(f"資料庫操作錯誤: {e}")
-        return "資料庫操作錯誤"
+        conn.rollback()  # 若發生錯誤，回滾事務
+        return f"刪除商品時發生錯誤: {e}"
     finally:
         if conn:
             conn.close()
 
-def update_product(product_name,new_have,new_price):#更新庫存或是價格
-    conn=creat_connet()
+
+def update_product_details_by_name(name: str, new_name: str = None, new_price: float = None, new_have: int = None):
+    conn = creat_connet()
     if conn is None:
-        print("資料庫連接失敗")
         return "資料庫連接失敗"
+    
     try:
-        talk=conn.cursor()
-        talk.execute("SELECT * FROM products WHERE name = %s",(product_name,))
-        if not talk.fetchone():
-            return f"商品{product_name}不存在"
-        talk.execute("UPDATE products SET have = %s, price = %s WHERE name = %s",(new_have,new_price,product_name))
-        conn.commit()
-        return f"商品{product_name}的庫存已更新為{new_have}個,價格已更新為{new_price}元"
+        talk = conn.cursor()
+        
+        # 查找商品是否存在
+        talk.execute("SELECT * FROM products WHERE name = %s", (name,))
+        product = talk.fetchone()
+        
+        if not product:
+            return f"商品 {name} 不存在"
+        
+        # 根據輸入的值更新相應的欄位
+        if new_name:
+            talk.execute("UPDATE products SET name = %s WHERE name = %s", (new_name, name))
+        if new_price is not None:
+            talk.execute("UPDATE products SET price = %s WHERE name = %s", (new_price, name))
+        if new_have is not None:
+            talk.execute("UPDATE products SET have = %s WHERE name = %s", (new_have, name))
+        
+        conn.commit()  # 提交更改
+        return f"商品 {name} 已更新"
     except Error as e:
-        print(f"資料庫操作錯誤: {e}")
-        return "資料庫操作錯誤"
+        conn.rollback()  # 若發生錯誤，回滾事務
+        return f"更新商品時發生錯誤: {e}"
     finally:
         if conn:
             conn.close()
-            
-def update_product_name(old_name,new_name):#更新商品名稱
-    conn=creat_connet()
-    if conn is None:
-        print("資料庫連接失敗")
-        return "資料庫連接失敗"
-    try:
-        talk=conn.cursor()
-        talk.execute("SELECT * FROM products WHERE name = %s",(old_name,))
-        if not talk.fetchone():
-            return f"商品{old_name}不存在"
-        talk.execute("UPDATE products SET name = %s WHERE name = %s",(new_name,old_name))
-        conn.commit()
-        return f"商品{old_name}已更新為{new_name}"
-    except Error as e:
-        print(f"資料庫操作錯誤: {e}")
-        return "資料庫操作錯誤"
-    finally:
-        if conn:
-            conn.close()
+
 
 def show_products():  # 顯示商品
     conn = creat_connet()

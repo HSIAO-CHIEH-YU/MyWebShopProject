@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理者商品管理</title>
+</head>
+<body>
+    <h1>商品管理頁面</h1>
+
+    <h2>商品列表</h2>
+    <div id="product-list">
+        <!-- 商品列表將動態載入 -->
+    </div>
+
+    <!-- 新增商品表單 -->
+    <div id="add-product-form">
+        <h3>新增商品</h3>
+        <form id="add-form">
+            <label for="add-name">商品名稱: </label>
+            <input type="text" id="add-name" required><br>
+
+            <label for="add-price">價格: </label>
+            <input type="number" id="add-price" required><br>
+
+            <label for="add-have">庫存數量: </label>
+            <input type="number" id="add-have" required><br>
+
+            <button type="submit">新增商品</button>
+        </form>
+    </div>
+
+    <!-- 編輯商品的表單 -->
+    <div id="edit-product-form" style="display: none;">
+        <h3>編輯商品</h3>
+        <form id="edit-form">
+            <label for="edit-name">商品名稱: </label>
+            <input type="text" id="edit-name" required><br>
+
+            <label for="edit-price">價格: </label>
+            <input type="number" id="edit-price" required><br>
+
+            <label for="edit-have">庫存數量: </label>
+            <input type="number" id="edit-have" required><br>
+
+            <button type="submit">提交修改</button>
+            <button type="button" onclick="cancelEdit()">取消</button>
+        </form>
+    </div>
+
+    <script>
+        let editingProductId = null;
+
+        // 載入商品列表
+        async function loadProducts() {
+            try {
+                let response = await fetch("http://127.0.0.1:8000/show_products");
+                let data = await response.json();
+                if (data.products && data.products.length > 0) {
+                    const productListContainer = document.getElementById("product-list");
+                    productListContainer.innerHTML = ''; // 清空列表
+
+                    data.products.forEach(product => {
+                        const productElement = document.createElement("div");
+                        productElement.innerHTML = `
+                            <h3>商品名稱: ${product.name}</h3>
+                            <p>價格: ${product.price} 元</p>
+                            <p>庫存數量: ${product.have}</p>
+                            <button onclick="editProduct('${product.name}', ${product.price}, ${product.have})">編輯</button>
+                            <button onclick="deleteProduct('${product.name}')">刪除</button>
+                            <hr>
+                        `;
+                        productListContainer.appendChild(productElement);
+                    });
+                } else {
+                    document.getElementById("product-list").innerText = "目前沒有商品";
+                }
+            } catch (error) {
+                console.error("載入商品列表失敗:", error);
+            }
+        }
+
+        // 編輯商品
+        function editProduct(name, price, have) {
+            editingProductName = name;
+            document.getElementById("edit-name").value = name;
+            document.getElementById("edit-price").value = price;
+            document.getElementById("edit-have").value = have;
+            document.getElementById("edit-product-form").style.display = "block";
+        }
+
+        // 提交編輯的商品資料
+        document.getElementById("edit-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById("edit-name").value;  // 商品名稱
+            const price = document.getElementById("edit-price").value;  // 新價格
+            const have = document.getElementById("edit-have").value;  // 新庫存
+
+            console.log("編輯商品名稱: ", name);
+            console.log("編輯商品價格: ", price);
+            console.log("編輯商品庫存: ", have);
+
+            try {
+                let response = await fetch(`http://127.0.0.1:8000/update_product/${encodeURIComponent(name)}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        new_name: name,
+                        price: price,
+                        have: have
+                    }),
+                });
+
+                let data = await response.json();
+                alert(data.message);
+                loadProducts(); // 重新載入商品列表
+                cancelEdit();
+            } catch (error) {
+                console.error("修改商品失敗:", error);
+                alert("修改商品失敗");
+            }
+        });
+
+
+        // 取消編輯
+        function cancelEdit() {
+            document.getElementById("edit-product-form").style.display = "none";
+            editingProductId = null;
+        }
+
+        // 刪除商品
+        async function deleteProduct(name) {
+            if (confirm("確定要刪除此商品嗎？")) {
+                try {
+                    let response = await fetch(`http://127.0.0.1:8000/delete_product/${name}`, {
+                        method: 'DELETE',
+                    });
+
+                    let data = await response.json();
+
+                    if (response.ok) {
+                        alert(data.message);
+                        loadProducts(); // 重新載入商品列表
+                    } else {
+                        alert(data.message); // 顯示返回的錯誤訊息
+                    }
+                } catch (error) {
+                    console.error("刪除商品失敗:", error);
+                    alert("刪除商品失敗");
+                }
+            }
+        }
+
+        // 新增商品
+        document.getElementById("add-form").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const name = document.getElementById("add-name").value;
+            const price = document.getElementById("add-price").value;
+            const have = document.getElementById("add-have").value;
+
+            try {
+                let response = await fetch("http://127.0.0.1:8000/add_product", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        price: price,
+                        have: have
+                    }),
+                });
+
+                let data = await response.json();
+                alert(data.message);
+                loadProducts(); // 重新載入商品列表
+            } catch (error) {
+                console.error("新增商品失敗:", error);
+                alert("新增商品失敗");
+            }
+        });
+
+        // 頁面加載時載入商品
+        window.onload = loadProducts;
+    </script>
+</body>
+</html>
