@@ -26,7 +26,7 @@ async def show_product():
 
 @product_router.delete("/delete_product/{product_name}")
 async def delete_product(product_name:str):
-    result=mysqlPython.delete_product_b(product_name)
+    result=mysqlPython.delete_product_by_name(product_name)
     if result=="商品不存在":
         return{"message":f"商品:{product_name}不存在"}
     else:
