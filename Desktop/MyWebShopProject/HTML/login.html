@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入頁面</title>
+    <link rel="stylesheet" type="text/css" href="../CSSandJSC/register.css">
+</head>
+<body>
+    <header>
+        <div class="mainpage">  <!-- 主頁面 -->
+            <h1>用戶登入!</h1>  <!-- 標題，顯示為「註冊」 -->
+        <!-- 表單，當提交時會觸發 JavaScript 函數 register() -->
+        <form id="loginForm">
+            <label class="lable" for="username">用戶名:</label>  <!-- 用戶名標籤 -->
+            <input type="text" id="username" name="username" required>  <!-- 用戶名輸入框，必須填寫 -->
+            <br>
+
+            <label class="lable" for="password">密碼:</label>  <!-- 密碼標籤 -->
+            <input type="password" id="password" name="password" required>  <!-- 密碼輸入框，必須填寫 -->
+            <br>
+            
+            <button type="submit">登入</button>  <!-- 註冊按鈕，觸發提交表單 -->
+        </form>
+    </header>
+    
+    <div class="botton">
+        <div class="botton_LMR">
+            <a href="AboutMe.html">
+                <img src="images/AboutMe.jpg" alt="關於我" class="botton-image">
+            </a>
+            <p class="textSize">關於我</p>
+        </div>
+        <div class="botton_LMR">
+            <a href="MyResume.html">
+                <img src="images/MyResume.avif" alt="我的履歷" class="botton-image">
+            </a>
+            <p class="textSize">我的履歷</p>
+        </div>
+        <div class="botton_LMR">
+            <a href="CallMe.html">
+                <img src="images/CallMe.avif" alt="聯絡方式" class="botton-image">
+            </a>
+            <p class="textSize">聯絡方式</p>
+        </div>
+    </div>
+    <!-- 引入外部 JavaScript 文件 -->
+    <script src="../CSSandJSC/loginJSC.js"></script>
+</body>
+</html>

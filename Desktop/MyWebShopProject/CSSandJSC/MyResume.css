@@ -1,0 +1,79 @@
+/* ======== 全站基礎樣式 ======== */
+body {
+    font-family: Arial, sans-serif; /* 設定全站字體 */
+    line-height: 1.6; /* 行距 */
+    margin: 0;
+    padding: 0;
+    background-color: #354649 ; /* 背景顏色 */
+    text-align: center; /* 讓所有文字置中 */
+}
+
+/* ======== 頁面標題區塊 ======== */
+header {
+    background: #2C3E50; /* 頁首背景色 */
+    color: white; /* 文字顏色 */
+    padding: 20px 0; /* 上下內距 */
+}
+
+/* ======== 個人資訊區塊 ======== */
+.profile {
+    margin: 20px auto; /* 設定外邊距 */
+}
+
+.profile-pic {
+    width: 150px; /* 設定大頭照寬度 */
+    height: 150px; /* 設定高度 */
+    border-radius: 50%; /* 圓形大頭照 */
+    object-fit: cover; /* 確保圖片完整顯示 */
+}
+
+/* ======== 各區塊標題 ======== */
+h2 {
+    color: #2C3E50; /* 標題顏色 */
+    border-bottom: 2px solid #2C3E50; /* 底線 */
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* ======== 各內容區塊 ======== */
+section {
+    background: #A3C6C4 ; /* 背景白色 */
+    margin: 20px auto; /* 外邊距 */
+    padding: 20px; /* 內邊距 */
+    width: 80%; /* 區塊寬度 */
+    max-width: 800px; /* 最大寬度 */
+    border-radius: 10px; /* 圓角 */
+    
+}
+
+/* ======== 清單樣式 ======== */
+ul {
+    list-style: none; /* 移除預設項目符號 */
+    padding: 0;
+}
+
+li {
+    margin: 10px 0; /* 設定行距 */
+}
+
+/* ======== 超連結樣式 ======== */
+a {
+    color: #2980B9; /* 連結顏色 */
+    text-decoration: none; /* 移除底線 */
+}
+
+a:hover {
+    text-decoration: underline; /* 滑鼠懸停時加上底線 */
+}
+
+/* ======== RWD 響應式設計 ======== */
+@media (max-width: 768px) {
+    section {
+        width: 95%; /* 手機版讓區塊變寬 */
+    }
+
+    .profile-pic {
+        width: 120px; /* 縮小大頭照 */
+        height: 120px;
+    }
+}
