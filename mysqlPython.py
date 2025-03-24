@@ -134,7 +134,7 @@ def update_product_details_by_name(name: str, new_name: str = None, new_price: f
         conn.commit()  # 提交更改
         return f"商品 {name} 已更新"
     except Error as e:
-        conn.rollback()  # 若發生錯誤，回滾事務
+        conn.rollback() 
         return f"更新商品時發生錯誤: {e}"
     finally:
         if conn:
