@@ -81,9 +81,8 @@ def add_product(product_name, price, have):  # 新增商品 #have是庫存
     finally:
         if conn:
             conn.close()
-            
 
-def delete_product_by_name(product_name: str):#刪除商品
+def delete_product_by_id(product_id: int):  # 根據商品 ID 刪除商品
     conn = creat_connet()
     if conn is None:
         return "資料庫連接失敗"
@@ -92,14 +91,14 @@ def delete_product_by_name(product_name: str):#刪除商品
         talk = conn.cursor()
         
         # 查找商品是否存在
-        talk.execute("SELECT * FROM products WHERE name = %s", (product_name,))
+        talk.execute("SELECT * FROM products WHERE id = %s", (product_id,))
         if not talk.fetchone():
-            return f"商品 {product_name} 不存在"
+            return f"商品 ID {product_id} 不存在"
         
         # 刪除商品
-        talk.execute("DELETE FROM products WHERE name = %s", (product_name,))
+        talk.execute("DELETE FROM products WHERE id = %s", (product_id,))
         conn.commit()  # 提交更改
-        return f"商品 {product_name} 已被刪除"
+        return f"商品 ID {product_id} 已被刪除"
     except Error as e:
         conn.rollback()  # 若發生錯誤，回滾事務
         return f"刪除商品時發生錯誤: {e}"
@@ -108,37 +107,28 @@ def delete_product_by_name(product_name: str):#刪除商品
             conn.close()
 
 
-def update_product_details_by_name(name: str, new_name: str = None, new_price: float = None, new_have: int = None):
+def update_product_name_by_id(product_id: int, new_name: str):  # 根據商品 ID 更新商品名稱
     conn = creat_connet()
     if conn is None:
         return "資料庫連接失敗"
-    
     try:
         talk = conn.cursor()
-        
         # 查找商品是否存在
-        talk.execute("SELECT * FROM products WHERE name = %s", (name,))
-        product = talk.fetchone()
+        talk.execute("SELECT * FROM products WHERE id = %s", (product_id,))
+        if not talk.fetchone():
+            return f"商品 ID {product_id} 不存在"
         
-        if not product:
-            return f"商品 {name} 不存在"
-        
-        # 根據輸入的值更新相應的欄位
-        if new_name:
-            talk.execute("UPDATE products SET name = %s WHERE name = %s", (new_name, name))
-        if new_price is not None:
-            talk.execute("UPDATE products SET price = %s WHERE name = %s", (new_price, name))
-        if new_have is not None:
-            talk.execute("UPDATE products SET have = %s WHERE name = %s", (new_have, name))
-        
-        conn.commit()  # 提交更改
-        return f"商品 {name} 已更新"
+        # 更新商品名稱
+        talk.execute("UPDATE products SET name = %s WHERE id = %s", (new_name, product_id))
+        conn.commit()
+        return f"商品 ID {product_id} 的名稱已更新為 {new_name}"
     except Error as e:
-        conn.rollback() 
-        return f"更新商品時發生錯誤: {e}"
+        conn.rollback()
+        return f"更新商品名稱時發生錯誤: {e}"
     finally:
         if conn:
             conn.close()
+
 
 
 def show_products():  # 顯示商品

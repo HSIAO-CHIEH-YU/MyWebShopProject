@@ -6,11 +6,11 @@ from typing import Optional
 product_router=APIRouter()
 
 class Product(BaseModel):
-    name:str
+    new_name:Optional[str]=None
+    name:Optional[str]=None
     price:Optional[float]=None
     have:Optional[int]=None
-    new_name:Optional[str]=None
-
+    
 @product_router.post("/add_product")
 async def add_product(product:Product):
     result=mysqlPython.add_product(product.name,product.price,product.have)
@@ -24,17 +24,17 @@ async def show_product():
     products=mysqlPython.show_products()
     return{"products":products}
 
-@product_router.delete("/delete_product/{product_name}")
-async def delete_product(product_name:str):
-    result=mysqlPython.delete_product_by_name(product_name)
-    if result=="商品不存在":
-        return{"message":f"商品:{product_name}不存在"}
+@product_router.delete("/delete_product/{product_id}")
+async def delete_product(product_id: int):
+    result = mysqlPython.delete_product_by_id(product_id)  # 修改為根據 ID 刪除
+    if "不不存在" in result:  # 根據錯誤訊息判斷商品是否不存在
+        return {"message": f"商品 ID: {product_id} 不存在"}
     else:
-        return{"message":f"商品:{product_name}已刪除"}
-    
-@product_router.put("/update_product/{name}")
-async def update_product(name: str, product: Product):
-    result = mysqlPython.update_product_details_by_name(name,new_name=product.new_name,new_price=product.price,new_have=product.have)
+        return {"message": f"商品 ID: {product_id} 已刪除"}
+
+@product_router.put("/update_product_name/{product_id}")
+async def update_product_name(product_id: int, product: Product):
+    result = mysqlPython.update_product_name_by_id(product_id, product.new_name)  # 修改為根據 ID 更新名稱
     return {"message": result}
 
 @product_router.get("/show_cart")

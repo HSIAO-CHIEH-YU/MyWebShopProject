@@ -66,8 +66,8 @@
                             <h3>商品名稱: ${product.name}</h3>
                             <p>價格: ${product.price} 元</p>
                             <p>庫存數量: ${product.have}</p>
-                            <button onclick="editProduct('${product.name}', ${product.price}, ${product.have})">編輯</button>
-                            <button onclick="deleteProduct('${product.name}')">刪除</button>
+                            <button onclick="editProduct(${product.id}, '${product.name}', ${product.price}, ${product.have})">編輯</button>
+                            <button onclick="deleteProduct(${product.id})">刪除</button>
                             <hr>
                         `;
                         productListContainer.appendChild(productElement);
@@ -81,36 +81,34 @@
         }
 
         // 編輯商品
-        function editProduct(name, price, have) {
-            editingProductName = name;
+        function editProduct(id, name, price, have) {
             document.getElementById("edit-name").value = name;
+            document.getElementById("edit-name").dataset.oldName = name;  // 記錄舊商品名稱
             document.getElementById("edit-price").value = price;
             document.getElementById("edit-have").value = have;
+            editingProductId = id;  // 記錄編輯中的商品 ID
             document.getElementById("edit-product-form").style.display = "block";
         }
-
-        // 提交編輯的商品資料
+        
+        // 提交編輯的商品名稱
         document.getElementById("edit-form").addEventListener("submit", async (event) => {
             event.preventDefault();
+            
+            const newName = document.getElementById("edit-name").value;  // 取得新商品名稱
 
-            const name = document.getElementById("edit-name").value;  // 商品名稱
-            const price = document.getElementById("edit-price").value;  // 新價格
-            const have = document.getElementById("edit-have").value;  // 新庫存
-
-            console.log("編輯商品名稱: ", name);
-            console.log("編輯商品價格: ", price);
-            console.log("編輯商品庫存: ", have);
+            if (!newName.trim()) {
+                alert("新名稱不可為空");
+                return;
+            }
 
             try {
-                let response = await fetch(`http://127.0.0.1:8000/update_product/${encodeURIComponent(name)}`, {
+                let response = await fetch(`http://127.0.0.1:8000/update_product_name/${editingProductId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        new_name: name,
-                        price: price,
-                        have: have
+                        new_name: newName  // 只傳遞新的商品名稱
                     }),
                 });
 
@@ -119,11 +117,10 @@
                 loadProducts(); // 重新載入商品列表
                 cancelEdit();
             } catch (error) {
-                console.error("修改商品失敗:", error);
-                alert("修改商品失敗");
+                console.error("修改商品名稱失敗:", error);
+                alert("修改商品名稱失敗");
             }
         });
-
 
         // 取消編輯
         function cancelEdit() {
@@ -132,10 +129,10 @@
         }
 
         // 刪除商品
-        async function deleteProduct(name) {
+        async function deleteProduct(id) {
             if (confirm("確定要刪除此商品嗎？")) {
                 try {
-                    let response = await fetch(`http://127.0.0.1:8000/delete_product/${name}`, {
+                    let response = await fetch(`http://127.0.0.1:8000/delete_product/${id}`, {
                         method: 'DELETE',
                     });
 
@@ -157,11 +154,16 @@
         // 新增商品
         document.getElementById("add-form").addEventListener("submit", async (event) => {
             event.preventDefault();
-
+        
             const name = document.getElementById("add-name").value;
-            const price = document.getElementById("add-price").value;
-            const have = document.getElementById("add-have").value;
-
+            const price = parseFloat(document.getElementById("add-price").value);  // 轉換為浮動點數
+            const have = parseInt(document.getElementById("add-have").value);    // 轉換為整數
+        
+            if (isNaN(price) || isNaN(have)) {
+                alert("價格和庫存數量必須是數字！");
+                return;
+            }
+        
             try {
                 let response = await fetch("http://127.0.0.1:8000/add_product", {
                     method: 'POST',
@@ -174,7 +176,7 @@
                         have: have
                     }),
                 });
-
+        
                 let data = await response.json();
                 alert(data.message);
                 loadProducts(); // 重新載入商品列表
@@ -183,7 +185,7 @@
                 alert("新增商品失敗");
             }
         });
-
+        
         // 頁面加載時載入商品
         window.onload = loadProducts;
     </script>
