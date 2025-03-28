@@ -24,6 +24,7 @@
                 productDiv.innerHTML = `
                     <h3>商品名稱: ${product.name}</h3>
                     <p>價格: ${product.price} 元</p>
+                    <p>庫存數量: ${product.have} 個</p>
                     <button onclick="addToCart(1, ${product.id}, 1)">加入購物車</button>`;
                 productList.appendChild(productDiv);
             });
