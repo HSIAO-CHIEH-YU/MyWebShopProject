@@ -105,10 +105,10 @@ async function updateProductStock(productId) {
 }
 
 // 刪除商品
-async function deleteProduct(id) {
+async function deleteProduct(productId) {
     if (confirm("確定要刪除此商品嗎？")) {
         try {
-            let response = await fetch(`http://127.0.0.1:8000/delete_product/${id}`, {
+            let response = await fetch(`http://127.0.0.1:8000/delete_product/${productId}`, {
                 method: 'DELETE',
             });
 
