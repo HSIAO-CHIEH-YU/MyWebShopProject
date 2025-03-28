@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
 import mysqlPython  # type: ignore
-from typing import Optional
+from typing import Optional #可選擇性的 不用每一次都一定要傳入該值
 
 product_router=APIRouter()
 
@@ -32,9 +32,19 @@ async def delete_product(product_id: int):
     else:
         return {"message": f"商品 ID: {product_id} 已刪除"}
 
-@product_router.put("/update_product_name/{product_id}")
+@product_router.put("/update_product_name/{product_id}")# 根據 ID 修改名稱
 async def update_product_name(product_id: int, product: Product):
-    result = mysqlPython.update_product_name_by_id(product_id, product.new_name)  # 修改為根據 ID 更新名稱
+    result = mysqlPython.update_product_name_by_id(product_id, product.new_name)  
+    return {"message": result}
+
+@product_router.put("/update_product_price/{product_id}")# 根據 ID 修改價格
+async def update_product_price(product_id: int, product: Product):
+    result = mysqlPython.update_product_price_by_id(product_id, product.price)  
+    return {"message": result}
+
+@product_router.put("/update_product_have/{product_id}")# 根據 ID 修改庫存
+async def update_product_have(product_id: int, product: Product):
+    result = mysqlPython.update_product_have_by_id(product_id, product.have)  
     return {"message": result}
 
 @product_router.get("/show_cart")

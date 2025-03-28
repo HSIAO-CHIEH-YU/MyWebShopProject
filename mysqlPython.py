@@ -129,7 +129,49 @@ def update_product_name_by_id(product_id: int, new_name: str):  # 根據商品 I
         if conn:
             conn.close()
 
-
+def update_product_price_by_id(product_id: int, new_price: int):  # 根據商品 ID 更新商品價格
+    conn = creat_connet()
+    if conn is None:
+        return "資料庫連接失敗"
+    try:
+        talk = conn.cursor()
+        # 查找商品是否存在
+        talk.execute("SELECT * FROM products WHERE id = %s", (product_id,))
+        if not talk.fetchone():
+            return f"商品 ID {product_id} 不存在"
+        
+        # 更新商品價格
+        talk.execute("UPDATE products SET price = %s WHERE id = %s", (new_price, product_id))
+        conn.commit()
+        return f"商品 ID {product_id} 的價格已更新為 {new_price} 元"
+    except Error as e:
+        conn.rollback()
+        return f"更新商品價格時發生錯誤: {e}"
+    finally:
+        if conn:
+            conn.close()
+            
+def update_product_have_by_id(product_id: int, new_have: int):  # 根據商品 ID 更新商品庫存
+    conn = creat_connet()
+    if conn is None:
+        return "資料庫連接失敗"
+    try:
+        talk = conn.cursor()
+        # 查找商品是否存在
+        talk.execute("SELECT * FROM products WHERE id = %s", (product_id,))
+        if not talk.fetchone():
+            return f"商品 ID {product_id} 不存在"
+        
+        # 更新商品庫存
+        talk.execute("UPDATE products SET have = %s WHERE id = %s", (new_have, product_id))
+        conn.commit()
+        return f"商品 ID {product_id} 的庫存已更新為 {new_have} 個"
+    except Error as e:
+        conn.rollback()
+        return f"更新商品庫存時發生錯誤: {e}"
+    finally:
+        if conn:
+            conn.close()
 
 def show_products():  # 顯示商品
     conn = creat_connet()
