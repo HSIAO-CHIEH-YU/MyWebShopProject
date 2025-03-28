@@ -23,7 +23,7 @@ async def show_product():
     products=mysqlPython.show_products()
     return{"products":products}
 
-@product_router.delete("/delete_product/{product_id}")# 根據 ID 刪除商品
+@product_router.delete("/delete_product/{product_id}")# 根據 ID 刪除
 async def delete_product(product_id: int):
     result = mysqlPython.delete_product_by_id(product_id)  
     if "不存在" in result:  # 根據錯誤訊息判斷商品是否不存在
