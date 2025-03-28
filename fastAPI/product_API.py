@@ -6,7 +6,6 @@ from typing import Optional #可選擇性的 不用每一次都一定要傳入�
 product_router=APIRouter()
 
 class Product(BaseModel):
-    new_name:Optional[str]=None
     name:Optional[str]=None
     price:Optional[float]=None
     have:Optional[int]=None
@@ -34,7 +33,7 @@ async def delete_product(product_id: int):
 
 @product_router.put("/update_product_name/{product_id}")# 根據 ID 修改名稱
 async def update_product_name(product_id: int, product: Product):
-    result = mysqlPython.update_product_name_by_id(product_id, product.new_name)  
+    result = mysqlPython.update_product_name_by_id(product_id, product.name)  
     return {"message": result}
 
 @product_router.put("/update_product_price/{product_id}")# 根據 ID 修改價格
