@@ -248,13 +248,13 @@ def show_cart(user_id):  # 顯示購物車
     
     try:
         talk = conn.cursor()
-        talk.execute("SELECT * FROM productsCar WHERE user_id = %s", (user_id,))
+        talk.execute("SELECT products.name,products.price,productsCar.many From productsCar JOIN products ON productsCar.product_id=products.id WHERE productsCar.user_id=%s",(user_id,))
         productsCar = talk.fetchall()
         if not productsCar:
             return "目前購物車是空的"
         product_list=[]
         for product in productsCar:
-            product_list.append({"user_id":product[0],"product_id":product[1],"many":product[2]})
+            product_list.append({"name":product[0],"price":product[1],"many":product[2]})
         return product_list
     except Error as e:
         print(f"資料庫操作錯誤: {e}")

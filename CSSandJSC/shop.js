@@ -34,5 +34,11 @@ async function addToCart(user_id, product_id, many) {
     }
 }
 
+// 跳轉至購物車頁面
+function goToCart() {
+    window.location.href = `cart.html?user_id=${user_id}`;  // 使用 user_id 傳遞參數
+}
+
+
 // 頁面載入時載入商品
 window.onload = loadProducts;
