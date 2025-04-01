@@ -10,8 +10,8 @@ async function loadProducts() {
             data.products.forEach(product => {
                 const productElement = document.createElement("div");
                 productElement.innerHTML = `
-                    <h3>商品名稱: ${product.name}<input type="name" id="name-${product.id}" value="${product.name}">
-                        <button onclick="updateProductName(${product.id})">更新商品名稱</button>
+                    <h3>商品名稱: <div>${product.name}<input type="name" id="name-${product.id}" value="${product.name}">
+                        <button onclick="updateProductName(${product.id})">更新商品名稱</button></div>
                     </h3>
                     <p>價格: <input type="number" id="price-${product.id}" value="${product.price}">
                         <button onclick="updateProductPrice(${product.id})">更新價格</button>

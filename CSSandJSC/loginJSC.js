@@ -24,3 +24,18 @@ document.getElementById("loginForm").addEventListener("submit",async function(ev
         alert(data.message); // 若登入失敗，顯示錯誤訊息
     }
 });
+async function login(username, password) {
+    const response = await fetch("http://127.0.0.1:8000/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+    });
+
+    const data = await response.json();
+    if (data.success) {
+        localStorage.setItem("user_id", data.user_id);  // 存 user_id
+        window.location.href = "shop.html";  // 轉到商店頁
+    } else {
+        alert("登入失敗");
+    }
+}

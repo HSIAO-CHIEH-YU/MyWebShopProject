@@ -47,7 +47,7 @@ async def update_product_have(product_id: int, product: Product):
     return {"message": result}
 
 @product_router.get("/show_cart/{user_id}")
-async def show_cart(user_id:int):
+async def show_user_cart(user_id:int):
     result=mysqlPython.show_cart(user_id)
     return result
 

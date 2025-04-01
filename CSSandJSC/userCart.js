@@ -1,41 +1,41 @@
-// 讀取 URL 中的 user_id 參數
-function getUserIdFromURL() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('user_id');
-}
+// 假設 user_id 是登入時存到 localStorage
+const user_id = localStorage.getItem("user_id");
 
-// 顯示購物車
-async function showCart() {
-    const user_id = getUserIdFromURL();  // 取得 user_id
+async function loadCart() {
     if (!user_id) {
-        alert("使用者未登入，無法顯示購物車！");
+        alert("請先登入！");
+        window.location.href = "login.html";  // 導向登入頁面
         return;
     }
 
     try {
-        const response = await fetch(`http://127.0.0.1:8000/show_cart?user_id=${user_id}`);
+        const response = await fetch(`http://127.0.0.1:8000/show_cart/${user_id}`);
         const data = await response.json();
 
-        const cartDiv = document.getElementById("cart-list");
-        cartDiv.innerHTML = "";  // 清空購物車內容
+        const cartItems = document.getElementById("cart-items");
+        cartItems.innerHTML = "";  // 清空購物車內容
 
-        if (data.length === 0) {
-            cartDiv.innerHTML = "<p>您的購物車是空的。</p>";
-        } else {
-            data.forEach(item => {
-                const cartItemDiv = document.createElement("div");
-                cartItemDiv.innerHTML = `
-                    <h3>商品名稱: ${item.name}</h3>
-                    <p>數量: ${item.many}</p>
-                    <p>價格: ${item.price} 元</p>
-                `;
-                cartDiv.appendChild(cartItemDiv);
-            });
+        if (data.cart === "目前購物車是空的") {
+            cartItems.innerHTML = "<p>購物車是空的</p>";
+            return;
         }
+
+        // 顯示購物車內容
+        data.cart.forEach(item => {
+            const itemDiv = document.createElement("div");
+            itemDiv.className = "cart-item";
+            itemDiv.innerHTML = `
+                <p>商品 ID: ${item.product_id}</p>
+                <p>數量: ${item.many}</p>
+                <hr>
+            `;
+            cartItems.appendChild(itemDiv);
+        });
+
     } catch (error) {
-        console.error("顯示購物車失敗:", error);
+        console.error("載入購物車失敗:", error);
     }
 }
 
-// 頁面載入時顯示購物車
-window.onload = showCart;
+// 頁面載入時執行
+window.onload = loadCart;
