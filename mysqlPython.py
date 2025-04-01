@@ -254,7 +254,7 @@ def show_cart(user_id):  # 顯示購物車
             return "目前購物車是空的"
         product_list=[]
         for product in productsCar:
-            product_list.append({"name":product[0],"price":product[1],"many":product[2]})
+            product_list.append({"name":product[0],"price":product[1],"many":product[2],"total":product[1]*product[2]})
         return product_list
     except Error as e:
         print(f"資料庫操作錯誤: {e}")
