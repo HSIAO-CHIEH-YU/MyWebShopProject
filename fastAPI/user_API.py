@@ -7,6 +7,15 @@ user_router=APIRouter()
 class User(BaseModel):# 定義一個 Pydantic 數據模型類別，用來驗證傳入的請求數據
     username:str  # 定義用戶名欄位，並且指定為字串類型
     password:str  # 定義密碼欄位，並且指定為字串類型
+
+class userAddCart(BaseModel):
+    user_id:int
+    product_id:int
+    many:int
+    # 定義購物車商品的欄位，並且指定為相應的類型
+    # product_id: 商品 ID
+    # product_name: 商品名稱
+    # many: 購買數量
     
 @user_router.post("/register")#定義一個POST請求，用來處理用戶註冊
 # 定義註冊函數，使用 async 是為了支持異步操作，這樣可以處理更多請求
@@ -27,9 +36,9 @@ async def login(user:User):
     else:
         return{"message":result}
     
-@user_router.get("/addToCart")
-async def addToCart(user_id: int, product_id: int, many: int):
-    result=mysqlPython.addToCart(user_id, product_id, many)
+@user_router.post("/addToCart")
+async def addToCart(AddCart:userAddCart):
+    result=mysqlPython.addToCart(AddCart.user_id, AddCart.product_id, AddCart.many)
     if result=="加入購物車成功":
         return {"message":"加入購物車成功"}
     else:

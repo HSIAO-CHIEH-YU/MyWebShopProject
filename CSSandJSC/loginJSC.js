@@ -19,6 +19,7 @@ document.getElementById("loginForm").addEventListener("submit",async function(ev
         window.location.href = "admin_shop.html"; // 成功登入後跳轉到管理員頁面
     } else if (data.message === "登入成功") {
         alert(data.message); // 顯示來自後端的訊息
+        localStorage.setItem("user_id", user_id); // 存儲用戶 ID 到 localStorage
         window.location.href = "shop.html"; // 成功登入後跳轉到用戶頁面
     } else {
         alert(data.message); // 若登入失敗，顯示錯誤訊息

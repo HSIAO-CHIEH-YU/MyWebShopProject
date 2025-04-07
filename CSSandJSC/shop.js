@@ -24,15 +24,34 @@ async function loadProducts() {
 }
 
 // 加入購物車
-async function addToCart(user_id, product_id, many) {
+async function addToCart(product_id, many) {
+    const user_id = localStorage.getItem("user_id"); // 從 localStorage 中取得 user_id
+
+    if (!user_id) {
+        alert("請先登入！");
+        return;
+    }
+
     try {
-        const res = await fetch(`http://127.0.0.1:8000/addToCart?user_id=${user_id}&product_id=${product_id}&many=${many}`);
+        // 這裡確保使用正確的 HTTP 方法，通常會是 POST，根據你的 API 設計
+        const res = await fetch(`http://127.0.0.1:8000/addToCart`, {
+            method: 'POST', // 改成 POST 方法
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                user_id: user_id,
+                product_id: product_id,
+                many: many
+            })
+        });
         const data = await res.json();
         alert(data.message);
     } catch (err) {
         console.error("加入購物車失敗", err);
     }
 }
+
 
 // 跳轉至購物車頁面
 function goToCart() {
